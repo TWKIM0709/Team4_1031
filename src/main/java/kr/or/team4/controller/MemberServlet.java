@@ -16,8 +16,6 @@ import javax.websocket.Session;
 import kr.or.team4.dao.MemberDao;
 import kr.or.team4.dto.MemberDto;
 
-import kr.or.team4.dao.MemberDao;
-
 @WebServlet("*.do")
 public class MemberServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -26,7 +24,7 @@ public class MemberServlet extends HttpServlet {
         super();
        
     }
-	private void doProcess(HttpServletRequest request, HttpServletResponse response, String method) throws ServletException, IOException {
+	private void doProcess(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//1. 한글 처리
 				request.setCharacterEncoding("UTF-8");
 				
@@ -43,8 +41,7 @@ public class MemberServlet extends HttpServlet {
 				 * 
 				 * URL 마지막 주소를 추출하고 판단의 근거로 삼기
 				 */
-				PrintWriter out = response.getWriter();
-				System.out.println("urlcommand : " + urlcommand);
+				
 				String viewpage = "";
 				HttpSession session = request.getSession();
 				PrintWriter out = response.getWriter();
@@ -53,24 +50,7 @@ public class MemberServlet extends HttpServlet {
 				if(urlcommand.equals("/login.do")) {
 					//로그인
 					viewpage="/login.jsp";
-<<<<<<< HEAD
-=======
-					RequestDispatcher dis = request.getRequestDispatcher(viewpage);
->>>>>>> 0136193f644b099443f540758ed48d108fd3e87f
 					
-					System.out.println("사용자가 로그인 시도중임");
-					String id = request.getParameter("id");
-					String pwd = request.getParameter("pwd");
-					
-					//System.out.println(id);
-					//System.out.println(pwd);
-
-					MemberDao dao = new MemberDao();
-					
-					
-					dis.forward(request, response);
-					
-					return;
 					//session에 id 설정
 				}else if(urlcommand.equals("/loginok.do")) {
 					// 로그인 여부 확인
@@ -191,19 +171,11 @@ public class MemberServlet extends HttpServlet {
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-<<<<<<< HEAD
 		doProcess(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doProcess(request, response);
-=======
-		doProcess(request, response, "get");
-	}
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doProcess(request, response, "post");
->>>>>>> 0136193f644b099443f540758ed48d108fd3e87f
 	}
 
 }
