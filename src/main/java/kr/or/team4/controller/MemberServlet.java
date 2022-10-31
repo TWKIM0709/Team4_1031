@@ -38,13 +38,31 @@ public class MemberServlet extends HttpServlet {
 				String viewpage = "";
 				//3. 요청 서비스 판단 (command 값을 비교해서)
 				//4. 데이터 저장 
-				if(urlcommand.equals("")) {
+				if(urlcommand.equals("/login.do")) {
+					//로그인
 					viewpage="";
-				} else if(urlcommand.equals("")) {
-					// 처리
+					
+					//session에 id 설정
+				} else if(urlcommand.equals("/register.do")) {
+					// 회원가입
+					
+				} else if(urlcommand.equals("/alllist.do")) {
+					// 전체조회
 				
-					//뷰 설정하기
-				}
+					// request.setAttribute("list",여기에값)
+				} else if(urlcommand.equals("/search.do")) {
+					// 조건조회
+					
+					// request.setAttribute("list",여기에값)
+				} else if(urlcommand.equals("/update.do")) {
+					// 수정
+				
+					//수정 후 전체조회로
+				} else if(urlcommand.equals("/delete.do")) {
+					// 삭제
+					
+					//삭제 후 전체조회로
+				} 
 				// ... else if 반복
 				//5. View 지정
 				RequestDispatcher dis = request.getRequestDispatcher(viewpage);
