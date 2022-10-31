@@ -73,35 +73,35 @@ public class MemberDao {
 		return MemberDtolist;
 	}
 //	select where id
-	public MemberDto getMemberDtoListById(String id) {
-		MemberDto MemberDto = null;
-		ResultSet rs = null;
-		PreparedStatement pstmt = null;
-		String sql = "select id, pwd, name, age, gender, email, ip from koreaMember where id = ?";
-		////////////////////////////////////
-		Connection conn = null;
-		//////////////////////////////////
-		try {
-			conn = ConnectionHelper.getConnection("oracle");
-			pstmt = conn.prepareStatement(sql);
-			
-			pstmt.setString(1, id);
-			rs = pstmt.executeQuery();
-			
-			if(rs.next()) {
-				MemberDto = new MemberDto(rs.getString(1),rs.getString(2),rs.getString(3),rs.getInt(4),rs.getString(5),rs.getString(6),rs.getString(7));
-			} else {
-				System.out.println("검색 결과가 없습니다.");
-			}
-		} catch (Exception e) {
-			System.out.println(e);
-		} finally {
-			ConnectionHelper.close(rs);
-			ConnectionHelper.close(pstmt);
-			ConnectionHelper.close(conn);
-		}
-		return MemberDto;
-	}
+//	public MemberDto getMemberDtoListById(String id) {
+//		MemberDto MemberDto = null;
+//		ResultSet rs = null;
+//		PreparedStatement pstmt = null;
+//		String sql = "select id, email, content from MemberDto where id=?";
+//		////////////////////////////////////
+//		Connection conn = null;
+//		//////////////////////////////////
+//		try {
+//			conn = ConnectionHelper.getConnection("oracle");
+//			pstmt = conn.prepareStatement(sql);
+//			
+//			pstmt.setString(1, id);
+//			rs = pstmt.executeQuery();
+//			
+//			if(rs.next()) {
+//				MemberDto = new MemberDto(rs.getString("id"),rs.getString("email"),rs.getString("content"));
+//			} else {
+//				System.out.println("검색 결과가 없습니다.");
+//			}
+//		} catch (Exception e) {
+//			System.out.println(e);
+//		} finally {
+//			ConnectionHelper.close(rs);
+//			ConnectionHelper.close(pstmt);
+//			ConnectionHelper.close(conn);
+//		}
+//		return MemberDto;
+//	}
 	
 //	insert
 	public int insertMemberDto(MemberDto MemberDto) {		
@@ -158,7 +158,7 @@ public class MemberDao {
 //	update
 	public int updateMemberDto(MemberDto MemberDto) {		
 		PreparedStatement pstmt = null;
-		String sql = "update koreaMember set age=?, name=?, gender=? email = ? where id=?";
+		String sql = "update koreaMember set age=?, name=?, gender=? where id=?";
 		int row = 0;////////////////////////////////////
 		Connection conn = null;
 		//////////////////////////////////
@@ -169,8 +169,6 @@ public class MemberDao {
 			pstmt.setInt(1, MemberDto.getAge());
 			pstmt.setString(2, MemberDto.getName());
 			pstmt.setString(3, MemberDto.getGender());
-			pstmt.setString(4, MemberDto.getEmail());
-			pstmt.setString(5, MemberDto.getId());
 			
 			row = pstmt.executeUpdate();
 			
