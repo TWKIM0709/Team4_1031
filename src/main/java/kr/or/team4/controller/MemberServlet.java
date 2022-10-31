@@ -1,6 +1,7 @@
 package kr.or.team4.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -8,6 +9,12 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpSessionContext;
+import javax.websocket.Session;
+
+import kr.or.team4.dao.MemberDao;
+import kr.or.team4.dto.MemberDto;
 
 @WebServlet("*.do")
 public class MemberServlet extends HttpServlet {
@@ -36,33 +43,125 @@ public class MemberServlet extends HttpServlet {
 				 */
 				
 				String viewpage = "";
+				HttpSession session = request.getSession();
+				PrintWriter out = response.getWriter();
 				//3. 요청 서비스 판단 (command 값을 비교해서)
 				//4. 데이터 저장 
 				if(urlcommand.equals("/login.do")) {
 					//로그인
-					viewpage="";
+					viewpage="/login.jsp";
 					
 					//session에 id 설정
-				} else if(urlcommand.equals("/register.do")) {
+				}else if(urlcommand.equals("/loginok.do")) {
+					// 로그인 여부 확인
+					
+					String id = request.getParameter("id");
+					String pwd = request.getParameter("pwd");
+					
+					MemberDao dao = new MemberDao();
+					
+					if(dao.getMemberDtoListById(id) != null) {
+						if(dao.getMemberDtoListById(id).getPwd() == pwd) {
+							session.setAttribute("id", id);
+							viewpage="/WEB-INF/views/loginok.jsp";
+						}else {
+							viewpage="/WEB-INF/views/login.jsp";
+						}
+					}else {
+						viewpage="/WEB-INF/views/register.jsp";
+					}
+					
+					
+					
+				}else if(urlcommand.equals("/register.do")) {
+					// 회원가입
+					viewpage="/WEB-INF/views/register.jsp";
+				} else if(urlcommand.equals("/registerok.do")) {
 					// 회원가입
 					
+					String id = request.getParameter("id");
+		    		String pwd = request.getParameter("pwd");
+		    		String name = request.getParameter("name");
+		    		int age = Integer.parseInt(request.getParameter("age"));
+		    		String gender = request.getParameter("gender");
+		    		String email = request.getParameter("email");
+		    		String ip = request.getParameter(request.getRemoteAddr());
+		    		
+		    		MemberDao dao = new MemberDao();
+		    		MemberDto dto = new MemberDto(id, pwd, name, age, gender, email, ip);
+		    		
+		    		int row = dao.insertMemberDto(dto);
+		    		
+		    		String resultdata = "";
+		    		if(row>0) {
+		    			resultdata = "welcome to kosa" + dto.getId()+"님";
+		    		}else {
+		    			resultdata = "Insret fail";
+		    		}
+		    		//4. 데이터 저장
+		    		request.setAttribute("data", resultdata);
+		    		
+		    		//뷰 설정					
+					viewpage="/WEB-INF/views/register.jsp";
 				} else if(urlcommand.equals("/alllist.do")) {
 					// 전체조회
-				
+					MemberDao dao = new MemberDao();
+					
+					request.setAttribute("list", dao.getAllMemberDtoList());
+					
+					viewpage = "/WEB-INF/views/alllist.jsp";
 					// request.setAttribute("list",여기에값)
 				} else if(urlcommand.equals("/search.do")) {
-					// 조건조회
+					// like조회
+					MemberDao dao = new MemberDao();
 					
+					request.setAttribute("list", dao.getMemberDtoByLikeEmail(request.getParameter("search")));
+					
+					viewpage = "/WEB-INF/views/alllist.jsp";
 					// request.setAttribute("list",여기에값)
 				} else if(urlcommand.equals("/update.do")) {
 					// 수정
-				
+					viewpage = "/WEB-INF/views/update.jsp";
+					//수정 후 전체조회로
+				} else if(urlcommand.equals("/updateok.do")) {
+					// 수정
+					MemberDao dao = new MemberDao();
+										
+					MemberDto dto = new MemberDto();
+					
+					dto.setId(request.getParameter("id"));
+					dto.setName(request.getParameter("name"));
+					dto.setAge(Integer.parseInt(request.getParameter("age")));
+					dto.setGender(request.getParameter("gender"));
+					dto.setEmail(request.getParameter("email"));
+					
+					int row = 0;
+					
+					row = dao.updateMemberDto(dto);
+					if(row>0) {
+						out.print("<script>alert('수정됨')</script>");
+					}else {
+						out.print("<script>alert('실패')</script>");
+					}
+					
+					viewpage = "/alllist.do";
 					//수정 후 전체조회로
 				} else if(urlcommand.equals("/delete.do")) {
 					// 삭제
+					MemberDao dao = new MemberDao();
 					
+					
+					dao.deleteMemberDto(request.getParameter("id"));
 					//삭제 후 전체조회로
-				} 
+					viewpage = "/alllist.do";
+				} else if(urlcommand.equals("/detail.do")){
+
+					MemberDao dao = new MemberDao();
+					
+					request.setAttribute("id", dao.getMemberDtoListById(request.getParameter("id")));
+					
+					viewpage = "/WEB-INF/views/detail.jsp";
+				}
 				// ... else if 반복
 				//5. View 지정
 				RequestDispatcher dis = request.getRequestDispatcher(viewpage);
@@ -72,11 +171,11 @@ public class MemberServlet extends HttpServlet {
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+		doProcess(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+		doProcess(request, response);
 	}
 
 }
