@@ -15,7 +15,7 @@ import kr.or.team4.utils.ConnectionHelper;
 */
 public class MemberDao {
 	
-	public int writeOK() {
+	public int writeOK(MemberDto md) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		String sql = "insert into mvcregister(id,pwd,email) values (?, ?, ?)";
@@ -45,8 +45,8 @@ public class MemberDao {
 	public List<MemberDto> getAllMemberDtoList() {
 		List<MemberDto> MemberDtolist = new ArrayList<MemberDto>();
 		ResultSet rs = null;
+		String sql = "select id, pwd, name, age, gender, email, ip from koreaMember";	
 		PreparedStatement pstmt = null;
-		String sql = "select id, email, content from MemberDto";
 		////////////////////////////////////
 		Connection conn = null;
 		//////////////////////////////////
@@ -61,7 +61,7 @@ public class MemberDao {
 			// 처리(화면조회)
 			// 만약에 중간에 DB연결 close() ..연결기반 ...
 			while (rs.next()) {
-				MemberDtolist.add(new MemberDto(rs.getString("id"), rs.getString("email"), rs.getString("content")));
+				MemberDtolist.add(new MemberDto(rs.getString(1),rs.getString(2),rs.getString(3),rs.getInt(4),rs.getString(5),rs.getString(6),rs.getString(7)));
 			}
 		} catch (Exception e) {
 			System.out.println(e);
@@ -77,7 +77,7 @@ public class MemberDao {
 		MemberDto MemberDto = null;
 		ResultSet rs = null;
 		PreparedStatement pstmt = null;
-		String sql = "select id, email, content from MemberDto where id=?";
+		String sql = "select id, pwd, name, age, gender, email, ip from koreaMember where id = ?";
 		////////////////////////////////////
 		Connection conn = null;
 		//////////////////////////////////
@@ -89,7 +89,7 @@ public class MemberDao {
 			rs = pstmt.executeQuery();
 			
 			if(rs.next()) {
-				MemberDto = new MemberDto(rs.getString("id"),rs.getString("email"),rs.getString("content"));
+				MemberDto = new MemberDto(rs.getString(1),rs.getString(2),rs.getString(3),rs.getInt(4),rs.getString(5),rs.getString(6),rs.getString(7));
 			} else {
 				System.out.println("검색 결과가 없습니다.");
 			}
@@ -102,10 +102,11 @@ public class MemberDao {
 		}
 		return MemberDto;
 	}
+	
 //	insert
 	public int insertMemberDto(MemberDto MemberDto) {		
 		PreparedStatement pstmt = null;
-		String sql = "insert into MemberDto(id, email, content) values (? , ? , ?)";
+		String sql = "insert into MemberDto(id, pwd, name, age, gender, email, ip) values (?, ?, ?, ?, ?, ?, ?)";
 		int row = 0;////////////////////////////////////
 		Connection conn = null;
 		//////////////////////////////////
@@ -114,8 +115,12 @@ public class MemberDao {
 			pstmt = conn.prepareStatement(sql);
 			
 			pstmt.setString(1, MemberDto.getId());
-			pstmt.setString(2, MemberDto.getEmail());
-			pstmt.setString(3, MemberDto.getContent());
+			pstmt.setString(2, MemberDto.getPwd());
+			pstmt.setString(3, MemberDto.getName());
+			pstmt.setInt(4, MemberDto.getAge());
+			pstmt.setString(5, MemberDto.getGender());
+			pstmt.setString(6, MemberDto.getEmail());
+			pstmt.setString(7, MemberDto.getIp());
 			
 			row = pstmt.executeUpdate();
 			
@@ -153,7 +158,7 @@ public class MemberDao {
 //	update
 	public int updateMemberDto(MemberDto MemberDto) {		
 		PreparedStatement pstmt = null;
-		String sql = "update MemberDto set email=?, content=? where id =?";
+		String sql = "update koreaMember set age=?, name=?, gender=? where id=?";
 		int row = 0;////////////////////////////////////
 		Connection conn = null;
 		//////////////////////////////////
@@ -161,9 +166,9 @@ public class MemberDao {
 			conn = ConnectionHelper.getConnection("oracle");
 			pstmt = conn.prepareStatement(sql);
 			
-			pstmt.setString(1, MemberDto.getEmail());
-			pstmt.setString(2, MemberDto.getContent());
-			pstmt.setString(3, MemberDto.getId());
+			pstmt.setInt(1, MemberDto.getAge());
+			pstmt.setString(2, MemberDto.getName());
+			pstmt.setString(3, MemberDto.getGender());
 			
 			row = pstmt.executeUpdate();
 			
@@ -186,17 +191,18 @@ public class MemberDao {
 		try {
 			conn = ConnectionHelper.getConnection("oracle");
 			pstmt = conn.prepareStatement(sql);
+
+			pstmt.setString(1, like);
 			
-			pstmt.setString(1, "%" + like + "%");
-			
-			rs = pstmt.executeQuery();
-			
-			if(rs.next()) {
-				do {
-					MemberDtolist.add(new MemberDto(rs.getString(1),rs.getString(2),rs.getString(3)));
-				}while(rs.next());
-			} else {
-				System.out.println("result 0");
+			// CRUD
+
+			rs = pstmt.executeQuery();// 명령 실행....
+
+			// rs를 통해서 DB서버 MemberDtory에 생성된 정보를 조회
+			// 처리(화면조회)
+			// 만약에 중간에 DB연결 close() ..연결기반 ...
+			while (rs.next()) {
+				MemberDtolist.add(new MemberDto(rs.getString(1),rs.getString(2),rs.getString(3),rs.getInt(4),rs.getString(5),rs.getString(6),rs.getString(7)));
 			}
 		} catch (Exception e) {
 			System.out.println(e);
@@ -205,6 +211,7 @@ public class MemberDao {
 			ConnectionHelper.close(pstmt);
 			ConnectionHelper.close(conn);
 		}
+	
 		return MemberDtolist;
 	}
 	//ID 유무 함수
