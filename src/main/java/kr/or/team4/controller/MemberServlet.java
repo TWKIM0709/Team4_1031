@@ -1,6 +1,7 @@
 package kr.or.team4.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -8,6 +9,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import kr.or.team4.dao.MemberDao;
 
 @WebServlet("*.do")
 public class MemberServlet extends HttpServlet {
@@ -17,7 +20,7 @@ public class MemberServlet extends HttpServlet {
         super();
        
     }
-	private void doProcess(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	private void doProcess(HttpServletRequest request, HttpServletResponse response, String method) throws ServletException, IOException {
 		//1. 한글 처리
 				request.setCharacterEncoding("UTF-8");
 				
@@ -34,14 +37,29 @@ public class MemberServlet extends HttpServlet {
 				 * 
 				 * URL 마지막 주소를 추출하고 판단의 근거로 삼기
 				 */
-				
+				PrintWriter out = response.getWriter();
+				System.out.println("urlcommand : " + urlcommand);
 				String viewpage = "";
 				//3. 요청 서비스 판단 (command 값을 비교해서)
 				//4. 데이터 저장 
 				if(urlcommand.equals("/login.do")) {
 					//로그인
-					viewpage="";
+					viewpage="/login.jsp";
+					RequestDispatcher dis = request.getRequestDispatcher(viewpage);
 					
+					System.out.println("사용자가 로그인 시도중임");
+					String id = request.getParameter("id");
+					String pwd = request.getParameter("pwd");
+					
+					//System.out.println(id);
+					//System.out.println(pwd);
+
+					MemberDao dao = new MemberDao();
+					
+					
+					dis.forward(request, response);
+					
+					return;
 					//session에 id 설정
 				} else if(urlcommand.equals("/register.do")) {
 					// 회원가입
@@ -72,11 +90,11 @@ public class MemberServlet extends HttpServlet {
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+		doProcess(request, response, "get");
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+		doProcess(request, response, "post");
 	}
 
 }
