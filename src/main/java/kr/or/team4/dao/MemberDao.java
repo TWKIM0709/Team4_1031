@@ -158,7 +158,7 @@ public class MemberDao {
 //	update
 	public int updateMemberDto(MemberDto MemberDto) {		
 		PreparedStatement pstmt = null;
-		String sql = "update koreaMember set age=?, name=?, gender=? where id=?";
+		String sql = "update koreaMember set age=?, name=?, gender=? email = ? where id=?";
 		int row = 0;////////////////////////////////////
 		Connection conn = null;
 		//////////////////////////////////
@@ -169,6 +169,8 @@ public class MemberDao {
 			pstmt.setInt(1, MemberDto.getAge());
 			pstmt.setString(2, MemberDto.getName());
 			pstmt.setString(3, MemberDto.getGender());
+			pstmt.setString(4, MemberDto.getEmail());
+			pstmt.setString(5, MemberDto.getId());
 			
 			row = pstmt.executeUpdate();
 			
