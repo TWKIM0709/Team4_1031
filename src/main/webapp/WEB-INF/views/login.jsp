@@ -8,7 +8,7 @@
 </head>
 <body>
 
-<form action="${pageContext.request.contextPath}/login.do" method="post" name="loginform">
+<form action="${pageContext.request.contextPath}/loginok.do" method="post" name="loginform">
 
 ID : <input type="text" name="id" id="id" placeholder="아이디"><br>
 PWD : <input type="password" name="pwd" id="pwd" placeholder="비밀번호"><br>

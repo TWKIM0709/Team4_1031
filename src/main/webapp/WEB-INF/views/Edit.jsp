@@ -7,7 +7,6 @@
 <script>location.href="login.do";</script>
 </c:if>
 <!-- member -->
-	<c:set var="member" value="${requestScope.member}"></c:set>
 <!DOCTYPE html>
 <html>
 <head>
@@ -31,6 +30,7 @@ td {
 </style>
 </head>
 <body>
+	<c:set var="member" value="${requestScope.member}"></c:set>
 	<table
 		style="width: 900px; height: 500px; margin-left: auto; margin-right: auto;">
 		<tr>
@@ -81,7 +81,7 @@ td {
 							<tr>
 								<td>이메일</td>
 								<td>
-									<input type="text" name="email" value="${member.eamil }" style="background-color: yellow">
+									<input type="text" name="email" value="${member.email }" style="background-color: yellow">
 								</td>
 							</tr>
 							<tr>

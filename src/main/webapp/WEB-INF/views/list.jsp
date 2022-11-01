@@ -39,13 +39,13 @@ td {
 				<jsp:include page="/common/Left.jsp"></jsp:include>
 			</td>
 			<td style="width: 700px">
-				<c:set var="list" value=${requestScope.list}></c:set>
+				<c:set var="list" value="${requestScope.list}"></c:set>
 					<table style="width: 400px;height: 100px;margin-left: auto;margin-right: auto">
 							<tr><th colspan="4">회원리스트</th></tr>
 							<c:forEach var="member" items="${list }">
 								<tr>
 									<td width="100px">
-										<a href='datail.do?id=${member.id }'>${member.id }</a>
+										<a href='detail.do?id=${member.id }'>${member.id }</a>
 									</td>
 									<td width="100px">${member.ip }</td>
 									<td>

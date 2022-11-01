@@ -106,10 +106,11 @@ public class MemberDao {
 //	insert
 	public int insertMemberDto(MemberDto MemberDto) {		
 		PreparedStatement pstmt = null;
-		String sql = "insert into MemberDto(id, pwd, name, age, gender, email, ip) values (?, ?, ?, ?, ?, ?, ?)";
+		String sql = "insert into koreaMember(id, pwd, name, age, gender, email, ip) values (?, ?, ?, ?, ?, ?, ?)";
 		int row = 0;////////////////////////////////////
 		Connection conn = null;
 		//////////////////////////////////
+		System.out.println(MemberDto);
 		try {
 			conn = ConnectionHelper.getConnection("oracle");
 			pstmt = conn.prepareStatement(sql);
@@ -135,7 +136,7 @@ public class MemberDao {
 //	delete
 	public int deleteMemberDto(String id) {		
 		PreparedStatement pstmt = null;
-		String sql = "delete from MemberDto where id=?";
+		String sql = "delete from koreaMember where id=?";
 		int row = 0;////////////////////////////////////
 		Connection conn = null;
 		//////////////////////////////////
@@ -158,7 +159,7 @@ public class MemberDao {
 //	update
 	public int updateMemberDto(MemberDto MemberDto) {		
 		PreparedStatement pstmt = null;
-		String sql = "update koreaMember set age=?, name=?, gender=? email = ? where id=?";
+		String sql = "update koreaMember set age=?, name=?, gender=? ,email = ? where id=?";
 		int row = 0;////////////////////////////////////
 		Connection conn = null;
 		//////////////////////////////////

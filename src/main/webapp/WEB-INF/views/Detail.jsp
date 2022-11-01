@@ -30,7 +30,7 @@ td {
 </style>
 </head>
 <body>
-	<c:set var="datail" value=${requestScope.member}></c:set>
+	<c:set var="member" value="${requestScope.member}"></c:set>
 	<table
 		style="width: 900px; height: 500px; margin-left: auto; margin-right: auto;">
 		<tr>
@@ -75,7 +75,7 @@ td {
 				  			 	</tr>
 				  			 	<tr>
 				  			 		<td colspan="2">
-				  			 			<a href="list.do">목록가기</a>
+				  			 			<a href="alllist.do">목록가기</a>
 				  			 		</td>
 				  			 	</tr>
 				  			 </table>	
