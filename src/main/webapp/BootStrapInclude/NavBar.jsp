@@ -28,7 +28,7 @@ body, h1,h2,h3,h4,h5,h6 {font-family: "Montserrat", sans-serif}
 	</c:when>
 	<c:otherwise>
 		<c:set var="link" value="logout.do"/> <c:set var="linkstr" value="Logout"/>
-	</c:otherwise>
+	</c:otherwise>	
 </c:choose>
   <a href="${link }" class="w3-bar-item w3-button w3-padding-large w3-hover-black">
     <i class="fa fa-male w3-xxlarge"></i>
