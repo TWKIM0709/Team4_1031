@@ -1,55 +1,50 @@
 
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-	<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-	
-<c:if test="${!empty sessionScope.id}&& ${sessionScope.id != 'admin' } ">
-<script>location.href="login.do";</script>
-</c:if>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
+<c:if test="${!empty sessionScope.id}&& ${sessionScope.id != 'admin' } ">
+<script>location.href="login.do";</script>
+</c:if>
+<title>W3.CSS Template</title>
 <meta charset="UTF-8">
-<title>Insert title here</title>
-<style type="text/css">
-table {
-	border: solid 2px black;
-	border-collapse: collapse;
-}
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
 
-tr {
-	border: solid 1px blue;
-	background-color: white;
-	color: black;
-}
-
-td {
-	border: solid 1px red;
-}
+<style>
+body, h1,h2,h3,h4,h5,h6 {font-family: "Montserrat", sans-serif}
+.w3-row-padding img {margin-bottom: 12px}
+/* Set the width of the sidebar to 120px */
+.w3-sidebar {width: 120px;background: #222;}
+/* Add a left margin to the "page content" that matches the width of the sidebar (120px) */
+#main {margin-left: 120px}
+/* Remove margins from "page content" on small screens */
+@media only screen and (max-width: 600px) {#main {margin-left: 0}}
 </style>
 </head>
-<body>
+<body class="w3-black">
+
+<!-- Icon Bar (Sidebar - hidden on small screens) -->
+ <jsp:include page="/BootStrapInclude/NavBar.jsp"></jsp:include>
+<!-- Page Content -->
 	<c:set var="member" value="${requestScope.member}"></c:set>
-	<table
-		style="width: 900px; height: 500px; margin-left: auto; margin-right: auto;">
-		<tr>
-			<td colspan="2">
-				<jsp:include page="/common/Top.jsp"></jsp:include>
-			</td>
-		</tr>
-		<tr>
-			<td style="width: 200px">
-				<jsp:include page="/common/Left.jsp"></jsp:include>
-			</td>
-			<td style="width: 700px">
-				<!--  
-				회원리스트 출력
-				<table style="width: 400px;height: 100px;margin-left: auto;margin-right: auto">
-				</table>
-				-->
-				  			 <table style="width: 400px;height: 100px;margin-left: auto;margin-right: auto;">
-				  			 	<tr>
+<div class="w3-padding-large" id="main">
+  <c:set var="list" value="${requestScope.list}"></c:set>
+    <h1 class="w3-jumbo">회원리스트</h1>
+					<table class="table table-dark">
+					<thead>
+					</thead>
+							<tbody>
+							<tr>
 				  			 		<td style="width:100px">아이디</td>
 				  			 		<td style="width:100px">${member.id }</td>
 				  			 	</tr>
@@ -78,12 +73,12 @@ td {
 				  			 			<a href="alllist.do">목록가기</a>
 				  			 		</td>
 				  			 	</tr>
-				  			 </table>	
-			</td>
-		</tr>
-		<tr>
-			<td colspan="2"><jsp:include page="/common/Bottom.jsp"></jsp:include></td>
-		</tr>
-	</table>
+						</tbody>
+					</table>
+    <!-- Footer -->
+ <jsp:include page="/BootStrapInclude/Footer.jsp"></jsp:include>
+	</div>
+<!-- END PAGE CONTENT -->
+
 </body>
 </html>

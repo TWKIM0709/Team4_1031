@@ -187,7 +187,7 @@ public class MemberDao {
 	public List<MemberDto> getMemberDtoByLikeEmail(String like){		
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		String sql = "select * from MemberDto where email like ?";
+		String sql = "select * from koreaMember where email like ?";
 		List<MemberDto> MemberDtolist = new ArrayList<MemberDto>();////////////////////////////////////
 		Connection conn = null;
 		//////////////////////////////////
@@ -195,7 +195,7 @@ public class MemberDao {
 			conn = ConnectionHelper.getConnection("oracle");
 			pstmt = conn.prepareStatement(sql);
 
-			pstmt.setString(1, like);
+			pstmt.setString(1, "%" + like + "%");
 			
 			// CRUD
 
@@ -214,7 +214,6 @@ public class MemberDao {
 			ConnectionHelper.close(pstmt);
 			ConnectionHelper.close(conn);
 		}
-	
 		return MemberDtolist;
 	}
 	//ID 유무 함수
