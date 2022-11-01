@@ -1,4 +1,3 @@
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -6,10 +5,38 @@
 <!DOCTYPE html>
 <html>
 <head>
-<c:if test="${!empty sessionScope.id}&& ${sessionScope.id != 'admin' } ">
-<script>location.href="login.do";</script>
-</c:if>
-<title>detail</title>
+	<script type="text/javascript">
+        let httpReq=null;
+	
+	function getInstance(){
+		  if(window.XMLHttpRequest){
+			  httpReq = new XMLHttpRequest(); //현재 브라우져 XMLHttpRequest 내장
+		  }else if(window.ActiveXObject){ //IE6 이하   //지금 필요없어요
+			  httpReq = new ActiveXObject("Msxml2.XMLHTTP");
+		  }else{
+			 throw new Error("AJAX 지원하지 않습니다"); 
+		  }
+		return httpReq;  
+	}
+	function handlerStateChange(){
+		 if(httpReq.readyState == 4){ //1. 서버에서 응답이 왔다면
+			 if(httpReq.status >= 200 && httpReq.status < 300){
+				//ㅇㅅㅇㅅㅇㅅㅇㅅㅇㅅㅇㅅㅇㅅㅇ
+				document.getElementById("test").innerHTML = httpReq.responseText;
+				//ㅇㅅㅇㅅㅇㅅㅇㅅㅇㅅㅇㅅㅇㅅㅇ
+			 }else{
+				 alert("status Text : " + httpReq.status);
+			 }
+		 }
+	}
+	function sendData(){
+		httpReq = getInstance();
+		httpReq.onreadystatechange = handlerStateChange;
+		httpReq.open("POST","test.do"); 
+		httpReq.send(); // form submit 버튼 클릭
+	}
+	</script>
+<title>list</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -34,49 +61,32 @@ body, h1,h2,h3,h4,h5,h6 {font-family: "Montserrat", sans-serif}
 <body class="w3-black">
 
 <!-- Icon Bar (Sidebar - hidden on small screens) -->
- <jsp:include page="/BootStrapInclude/NavBar.jsp"></jsp:include>
 <!-- Page Content -->
-	<c:set var="member" value="${requestScope.member}"></c:set>
 <div class="w3-padding-large" id="main">
   <c:set var="list" value="${requestScope.list}"></c:set>
-    <h1 class="w3-jumbo">회원리스트</h1>
+    <div id="test">
 					<table class="table table-dark">
 					<thead>
 					</thead>
 							<tbody>
-							<tr>
-				  			 		<td style="width:100px">아이디</td>
-				  			 		<td style="width:100px">${member.id }</td>
-				  			 	</tr>
-				  			 	<tr>
-				  			 		<td style="width:100px">비번</td>
-				  			 		<td style="width:100px">${member.pwd }</td>
-				  			 	</tr>
-				  			 	<tr>
-				  			 		<td style="width:100px">이름</td>
-				  			 		<td style="width:100px">${member.name}</td>
-				  			 	</tr>
-				  			 	<tr>
-				  			 		<td style="width:100px">나이</td>
-				  			 		<td style="width:100px">${member.age }</td>
-				  			 	</tr>
-				  			 	<tr>
-				  			 		<td style="width:100px">성별</td>
-				  			 		<td style="width:100px">${member.gender }</td>
-				  			 	</tr>
-				  			 	<tr>
-				  			 		<td style="width:100px">이메일</td>
-				  			 		<td style="width:100px">${member.email}</td>
-				  			 	</tr>
-				  			 	<tr>
-				  			 		<td colspan="2">
-				  			 			<a href="alllist.do">목록가기</a>
-				  			 		</td>
-				  			 	</tr>
+							<c:forEach var="member" items="${list }">
+								<tr>
+									<td width="100px">
+										<a href='detail.do?id=${member.id }'>${member.id }</a>
+									</td>
+									<td width="100px">${member.ip }</td>
+									<td>
+										<a href="delete.do?id=${member.id }">[삭제]</a>
+									</td>
+									<td>
+										<a href="update.do?id=${member.id }">[수정]</a>
+									</td>
+								</tr> 
+						</c:forEach>
 						</tbody>
 					</table>
+					</div>
     <!-- Footer -->
- <jsp:include page="/BootStrapInclude/Footer.jsp"></jsp:include>
 	</div>
 <!-- END PAGE CONTENT -->
 

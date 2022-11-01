@@ -5,7 +5,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>W3.CSS Template</title>
+	
+<title>list</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -32,9 +33,10 @@ body, h1,h2,h3,h4,h5,h6 {font-family: "Montserrat", sans-serif}
 <!-- Icon Bar (Sidebar - hidden on small screens) -->
  <jsp:include page="/BootStrapInclude/NavBar.jsp"></jsp:include>
 <!-- Page Content -->
-<div class="w3-padding-large" id="main">
   <c:set var="list" value="${requestScope.list}"></c:set>
+<div class="w3-padding-large" id="main">
     <h1 class="w3-jumbo">회원리스트</h1>
+    <div id="test">
 					<table class="table table-dark">
 					<thead>
 					</thead>
@@ -55,14 +57,45 @@ body, h1,h2,h3,h4,h5,h6 {font-family: "Montserrat", sans-serif}
 						</c:forEach>
 						</tbody>
 					</table>
-						<form action="search.do" method="post">
-							회원명:<input type="text" name="search">
-							<input type="submit" value="이름검색하기">
-						</form>
+					</div>
+							회원아이디 <input type="text" name="search" id="search"> 
+							<button value="이름검색하기" onclick="sendData()">검색하기</button>
     <!-- Footer -->
- <jsp:include page="/BootStrapInclude/Footer.jsp"></jsp:include>
 	</div>
+ <jsp:include page="/BootStrapInclude/Footer.jsp"></jsp:include>
 <!-- END PAGE CONTENT -->
 
 </body>
+<script type="text/javascript">
+        let httpReq=null;
+	
+	function getInstance(){
+		  if(window.XMLHttpRequest){
+			  httpReq = new XMLHttpRequest(); //현재 브라우져 XMLHttpRequest 내장
+		  }else if(window.ActiveXObject){ //IE6 이하   //지금 필요없어요
+			  httpReq = new ActiveXObject("Msxml2.XMLHTTP");
+		  }else{
+			 throw new Error("AJAX 지원하지 않습니다"); 
+		  }
+		return httpReq;  
+	}
+	function handlerStateChange(){
+		 if(httpReq.readyState == 4){ //1. 서버에서 응답이 왔다면
+			 if(httpReq.status >= 200 && httpReq.status < 300){
+				//ㅇㅅㅇㅅㅇㅅㅇㅅㅇㅅㅇㅅㅇㅅㅇ
+				document.getElementById("test").innerHTML = httpReq.responseText;
+				//ㅇㅅㅇㅅㅇㅅㅇㅅㅇㅅㅇㅅㅇㅅㅇ
+			 }else{
+				 alert("status Text : " + httpReq.status);
+			 }
+		 }
+	}
+	function sendData(){
+		httpReq = getInstance();
+		httpReq.onreadystatechange = handlerStateChange;
+		let search = document.getElementById("search").value;
+		httpReq.open("POST","test.do?search=" + search); 
+		httpReq.send(); // form submit 버튼 클릭
+	}
+	</script>
 </html>

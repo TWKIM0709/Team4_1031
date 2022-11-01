@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    <%@taglib prefix="c"  uri="http://java.sun.com/jsp/jstl/core"%>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -21,10 +22,17 @@ body, h1,h2,h3,h4,h5,h6 {font-family: "Montserrat", sans-serif}
     <i class="fa fa-home w3-xxlarge"></i>
     <p>HOME</p>
   </a>
-
-  <a href="login.do" class="w3-bar-item w3-button w3-padding-large w3-hover-black">
+<c:choose>
+	<c:when test="${empty sessionScope.id }">
+		<c:set var="link" value="login.do"/> <c:set var="linkstr" value="Login"/>
+	</c:when>
+	<c:otherwise>
+		<c:set var="link" value="logout.do"/> <c:set var="linkstr" value="Logout"/>
+	</c:otherwise>
+</c:choose>
+  <a href="${link }" class="w3-bar-item w3-button w3-padding-large w3-hover-black">
     <i class="fa fa-male w3-xxlarge"></i>
-    <p>Login</p>
+    <p>${linkstr }</p>
   </a>
   <a href="register.do" class="w3-bar-item w3-button w3-padding-large w3-hover-black">
     <i class="fa fa-user w3-xxlarge"></i>

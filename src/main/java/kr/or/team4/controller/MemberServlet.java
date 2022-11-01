@@ -175,6 +175,14 @@ public class MemberServlet extends HttpServlet {
                request.setAttribute("member", dao.getMemberDtoListById(request.getParameter("id")));
                
                viewpage = "/WEB-INF/views/detail.jsp";
+            } else if (urlcommand.equals("/test.do")){
+            	// like조회
+                MemberDao dao = new MemberDao();
+                
+                request.setAttribute("list", dao.getMemberDtoByLikeEmail(request.getParameter("search")));
+                
+                viewpage = "/WEB-INF/test/test.jsp";
+                // request.setAttribute("list",여기에값)
             }
             // ... else if 반복
             //5. View 지정
